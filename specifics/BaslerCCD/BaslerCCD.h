@@ -387,6 +387,7 @@ protected :
     bool                m_is_gain_available;
     bool                m_is_current_throughput_available;
     bool                m_is_max_throughput_available;
+    bool                m_is_temperature_available;
     std::string         m_exposure_mode;
     
     //lima OBJECTS

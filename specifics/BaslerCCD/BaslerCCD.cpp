@@ -154,6 +154,7 @@ void BaslerCCD::init_device()
     m_is_gain_available = false;
     m_is_current_throughput_available = false;
     m_is_max_throughput_available = false;
+    m_is_temperature_available = false;
 
     INFO_STREAM << "Create the inner-appender in order to manage logs." << endl;  
     yat4tango::InnerAppender::initialize(this, 512);
@@ -234,6 +235,7 @@ void BaslerCCD::init_device()
 
         m_is_max_throughput_available = m_camera->isMaxThroughputAvailable();
         m_is_current_throughput_available = m_camera->isCurrentThroughputAvailable();
+        m_is_temperature_available = m_camera->isTemperatureAvailable();
         
         INFO_STREAM << "Write tango hardware at Init - exposureMode." << endl;
         Tango::WAttribute &exposureMode = dev_attr->get_w_attr_by_name("exposureMode");
@@ -1143,6 +1145,9 @@ void BaslerCCD::read_temperature(Tango::Attribute &attr)
         {
             if (m_camera != 0)
             {
+                if(!m_is_temperature_available)
+                    return;
+
                 m_camera->getTemperature((double&) *attr_temperature_read);
                 attr.set_value(attr_temperature_read);
             }
